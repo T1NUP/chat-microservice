@@ -48,13 +48,14 @@ public class ChatController {
         if(!userList.contains(username)) {
             userList.add(username);
         }
+        System.out.println("Adding user in list: "+username);
         return userList.toArray();
     }
 
     @MessageMapping("/sendMessage")
     @SendTo("/topic/public")
     public ChatTemplate sendMessage(@Payload ChatTemplate chatMessage) {
-        System.out.println("receiver /sendMessage" + chatMessage.getReceiver());
+        System.out.println("receiver /sendMessage" + chatMessage.getContent());
         return chatMessage;
     }
 
@@ -64,7 +65,7 @@ public class ChatController {
                                SimpMessageHeaderAccessor headerAccessor) {
         // Add user in web socket session
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-        System.out.println(headerAccessor.getSubscriptionId());
+        System.out.println(headerAccessor.getSubscriptionId()+"####"+chatMessage.getSender());
         return chatMessage;
     }
 
