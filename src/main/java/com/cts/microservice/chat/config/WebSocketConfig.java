@@ -42,7 +42,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 				if (StompCommand.CONNECT.equals(accessor.getCommand())) {
 //                    Authentication user = ... ; // access authentication header(s)
 //                    accessor.setUser(user);
-					System.out.println("+ Connected, TODO");
+//					System.out.println("+ Connected, TODO");
 				}
 				return message;
 			}

@@ -3,6 +3,7 @@ package com.cts.microservice.chat.controller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -17,6 +18,9 @@ import com.cts.microservice.chat.model.OutputMessage;
 
 @Controller
 public class ChatController {
+	
+	private Logger LOG= Logger.getLogger(this.getClass());
+	
     protected static ArrayList<String> userList = new ArrayList<String>();
 
     @Autowired
@@ -26,7 +30,8 @@ public class ChatController {
     public String sendSpecific(@Payload ChatTemplate msg) throws Exception {
             String time = LocalDateTime.now().toString();
             OutputMessage out = new OutputMessage(msg.getSender(), msg.getContent(), time, false);
-            System.out.println("receiver " + msg.getReceiver());
+//            System.out.println("receiver " + msg.getReceiver());
+            LOG.debug("receiver "+msg.getReceiver());
             simpMessagingTemplate.convertAndSendToUser(msg.getReceiver(), "/app/user/queue/specific-user", out);
             return "Received";
     }
@@ -48,14 +53,16 @@ public class ChatController {
         if(!userList.contains(username)) {
             userList.add(username);
         }
-        System.out.println("Adding user in list: "+username);
+//        System.out.println("Adding user in list: "+username);
+        LOG.debug("Adding user in list: "+username);
         return userList.toArray();
     }
 
     @MessageMapping("/sendMessage")
     @SendTo("/topic/public")
     public ChatTemplate sendMessage(@Payload ChatTemplate chatMessage) {
-        System.out.println("receiver /sendMessage" + chatMessage.getContent());
+//        System.out.println("receiver /sendMessage" + chatMessage.getContent());
+    	LOG.debug("receiver /sendMessage "+chatMessage.getContent());
         return chatMessage;
     }
 
@@ -65,14 +72,16 @@ public class ChatController {
                                SimpMessageHeaderAccessor headerAccessor) {
         // Add user in web socket session
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-        System.out.println(headerAccessor.getSubscriptionId()+"####"+chatMessage.getSender());
+//        System.out.println(headerAccessor.getSubscriptionId()+"####"+chatMessage.getSender());
+        LOG.debug(headerAccessor.getSubscriptionId()+"####"+chatMessage.getSender());
         return chatMessage;
     }
 
     @MessageMapping("/postStatus")
     @SendTo("/topic/status")
     public boolean check(@Payload boolean status) {
-        System.out.println("Received status post");
+//        System.out.println("Received status post");
+    	LOG.debug("Received status post");
         return true;
     }
     

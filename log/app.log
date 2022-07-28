@@ -1,0 +1,4 @@
+22-07-28 10:38:14 DEBUG clientOutboundChannel-2 controller.EventListner:26 - Received a new web socket connection
+22-07-28 10:38:14 DEBUG clientOutboundChannel-1 controller.EventListner:26 - Received a new web socket connection
+22-07-28 10:38:15 DEBUG clientInboundChannel-3 controller.ChatController:57 - Adding user in list: FirstLast
+22-07-28 10:38:15 DEBUG clientInboundChannel-16 controller.ChatController:76 - null####FirstLast

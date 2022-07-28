@@ -1,5 +1,6 @@
 package com.cts.microservice.chat.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -14,12 +15,15 @@ import com.cts.microservice.chat.model.ChatTemplate.MessageType;
 @Component
 public class EventListner {
 	
+	private Logger LOG= Logger.getLogger(this.getClass());
+	
 	@Autowired
     private SimpMessageSendingOperations messagingTemplate;
 	
 	@EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        System.out.println("Received a new web socket connection");
+//        System.out.println("Received a new web socket connection");
+		LOG.debug("Received a new web socket connection");
     }
 	
 	@EventListener
@@ -30,7 +34,8 @@ public class EventListner {
         ChatController.userList.remove(username);
 
         if(username != null) {
-        	System.out.println("User Disconnected : " + username);
+//        	System.out.println("User Disconnected : " + username);
+        	LOG.debug("User Disconnected : " + username);
 
             ChatTemplate chat = new ChatTemplate();
             chat.setType(MessageType.LEAVE);
